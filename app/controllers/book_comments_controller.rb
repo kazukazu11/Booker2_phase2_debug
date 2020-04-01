@@ -1,16 +1,16 @@
 class BookCommentsController < ApplicationController
   before_action :authenticate_user!
   def create
+    @book = Book.find(params[:book_id])
     @comment = current_user.book_comments.new(comment_params)
     @comment.book_id = params[:book_id]
     @comment.save
-    redirect_to books_path
   end
 
   def destroy
-    @comment = BookComment.find(params[:id])
+    @comment = BookComment.find(params[:book_id])
+    @book = @comment.book
     @comment.destroy
-    redirect_to books_path
   end
 
   private
@@ -18,3 +18,4 @@ class BookCommentsController < ApplicationController
     params.require(:book_comment).permit(:body)
   end
 end
+ 
